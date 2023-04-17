@@ -1,7 +1,7 @@
-from db.session import SessionLocal
+from db.session import session
 
-def get_db():
-	db = SessionLocal()
+def fastapi_db():
+	db = session()
 	try:
 		yield db # DB 연결 성공한 경우, DB 세션 시작
 	finally:
