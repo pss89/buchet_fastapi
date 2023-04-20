@@ -1,8 +1,9 @@
 # main.py
 
 import os
-from typing import List,Optional
 from fastapi import FastAPI
+from typing import List,Optional
+from starlette.middleware.cors import CORSMiddleware
 # from routes.test import router as test_router
 # from pydantic import BaseModel
 
@@ -11,6 +12,14 @@ from db.models.test_model import TestTable,Test
 
 app = FastAPI() # FastAPI 모듈
 # app.include_router(test_router) # 다른 route파일들을 불러와 포함시킴
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 @app.get("/") # Route Path
 def index():
@@ -56,4 +65,4 @@ def delete_tests(test_id:int):
     test = session.query(TestTable).filter(TestTable.id == test_id).delete()
     session.commit()
     
-    return read_tests
+    return f"{test_id} delete.."
