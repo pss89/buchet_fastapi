@@ -1,4 +1,4 @@
-#!/projects/webapp/buchet_fastapi/venv3_10/bin/python
+#!/svc/webapp/buchet_fastapi/venv3_10/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
