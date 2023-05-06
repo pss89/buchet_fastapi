@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/svc/webapp/buchet_fastapi/venv3_10"
+VIRTUAL_ENV="/projects/webapp/buchet_fastapi/venv3_10"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

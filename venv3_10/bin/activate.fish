@@ -30,7 +30,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/svc/webapp/buchet_fastapi/venv3_10"
+set -gx VIRTUAL_ENV "/projects/webapp/buchet_fastapi/venv3_10"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
