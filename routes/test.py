@@ -5,10 +5,9 @@ from fastapi import APIRouter
 from typing import List,Optional
 from db.session import session
 from db.models.test_model import TestTable,Test
-
 from apis.slack_api import SlackAPI
-from fastapi.encoders import jsonable_encoder
-import json
+# from fastapi.encoders import jsonable_encoder
+# import json
 
 load_dotenv()
 
