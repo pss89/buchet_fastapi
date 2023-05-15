@@ -36,6 +36,7 @@ class UserInfo(Base):
     
 class UserInfoDetail(Base):
     __tablename__ = 'user_info_detail'
+    # foreignkey 를 정의해줘야 join 가능
     user_id = Column(String(50),ForeignKey("user_info.user_id"),primary_key=True,nullable=False)
     name = Column(String(15),nullable=False)
     gender_type = Column(String(20))
