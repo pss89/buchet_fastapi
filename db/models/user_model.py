@@ -16,8 +16,10 @@ class UserInfo(Base):
     insert_datetime = Column(DateTime)
     update_datetime = Column(DateTime)
     
+    # user_info_detail에 foreignkey 가 있는것을 확인한다
     details = relationship("UserInfoDetail")
 
+    # user_info, user_info_detail 테이블 join 한 쿼리 호출하기 위한 함수
     def get_users():
         # users = session.query(UserInfo).join(UserInfo.details).all()
         users = (
@@ -45,5 +47,3 @@ class UserInfoDetail(Base):
     service_code = Column(String(10),nullable=False,default='default')
     email_cert_type = Column(String(1),nullable=False,default='N')
     update_datetime = Column(DateTime)
-    
-    # f_user_id = Column(String(50), ForeignKey("user_info.user_id"))

@@ -3,8 +3,8 @@
 from fastapi import FastAPI
 from typing import List,Optional
 from starlette.middleware.cors import CORSMiddleware
-from routes.test import router as test_route
-from routes.users import router as user_route
+from routes.test import router as test
+from routes.users import router as user
 
 app = FastAPI() # FastAPI 모듈
 
@@ -22,5 +22,6 @@ def index():
         "Python": "Framework-FastAPI",
     }
     
-app.include_router(test_route)
-app.include_router(user_route)
+# routes 폴더에 추가 된 route 파일들 호출
+app.include_router(test)
+app.include_router(user)
