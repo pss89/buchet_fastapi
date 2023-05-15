@@ -1,6 +1,7 @@
-from sqlalchemy import Column,Integer,String,DateTime
+from sqlalchemy import Column,Integer,String,DateTime,select,ForeignKey
+from sqlalchemy.orm import relationship,selectinload,joinedload
 from pydantic import BaseModel
-from db.session import Base
+from db.session import Base,session
 
 class UserInfo(Base):
     __tablename__ = 'user_info'
@@ -15,9 +16,25 @@ class UserInfo(Base):
     insert_datetime = Column(DateTime)
     update_datetime = Column(DateTime)
     
+    details = relationship("UserInfoDetail")
+
+    def get_users():
+        # users = session.query(UserInfo).join(UserInfo.details).all()
+        users = (
+            session.query(UserInfo)
+            .join(UserInfo.details)
+            .options(selectinload(UserInfo.details))
+            # .filter(UserInfo.user_id == 'sosn3')
+            # .filter(UserInfo.user_id == user_id)
+            .all()
+        )
+
+        
+        return users
+    
 class UserInfoDetail(Base):
     __tablename__ = 'user_info_detail'
-    user_id = Column(String(50),primary_key=True,nullable=False)
+    user_id = Column(String(50),ForeignKey("user_info.user_id"),primary_key=True,nullable=False)
     name = Column(String(15),nullable=False)
     gender_type = Column(String(20))
     nickname = Column(String(15))
@@ -28,3 +45,5 @@ class UserInfoDetail(Base):
     service_code = Column(String(10),nullable=False,default='default')
     email_cert_type = Column(String(1),nullable=False,default='N')
     update_datetime = Column(DateTime)
+    
+    # f_user_id = Column(String(50), ForeignKey("user_info.user_id"))
