@@ -4,7 +4,8 @@ from db.session import session
 from db.models.naver_review_model import NaverReview,NR
 
 import requests,json
-from bs4 import BeautifulSoup
+from datetime import datetime
+# from sqlalchemy
 
 router = APIRouter(
     prefix='/request'
@@ -36,22 +37,76 @@ def read_users():
     # true 면 진행
     response_check = response.ok
     
-    response_data = False
+    result_array = []
     if response_check==True:
         response_data = response.json()
+        # json_load = json.dumps(response_data, ensure_ascii=False)
+        # data_load = json.loads(response_data)
+        # # print(json_load)
+        
+        # for key, value in data_load.items():
+        #     print(f"{key}: {value}")
+        
+        json_load = json.dumps(response_data)
     
-    json_load = json.dumps(response_data)
-    data_list = json.loads(json_load)
+        data_list = json.loads(json_load)
+        
+        # print(type(data_list))
+        for key, value in data_list.items():
+            # print(f"{key}: {value}")
+            if key == 'contents':
+                # result_array = [{i: value[i]} for i in range(len(value))] # ok
+                # i=0
+                for item in value:
+                    time_str = item['createDate']
+                    datetime_obj = datetime.strptime(time_str, "%Y-%m-%dT%H:%M:%S.%f%z")
+                    formatted_time_str = datetime_obj.strftime("%Y%m%d%H%M%S")
+
+                    review_attaches = json.dumps(item['reviewAttaches']) if len(item['reviewAttaches']) > 0 else None
+
+                    nr = NaverReview()
+
+                    nr.original_review_id = item['id']
+                    nr.review_type = item['reviewType']
+                    nr.review_content_type = item['reviewContentClassType']
+                    nr.review_score = item['reviewScore']
+                    nr.review_content = item['reviewContent']
+                    nr.original_create_datetime = formatted_time_str
+                    nr.original_product_no = item['productNo']
+                    nr.original_product_url = item['productUrl']
+                    nr.attach_url = review_attaches
+                    nr.write_member_id = item['writerMemberId']
+        
+                    # if(review_attaches != None):
+                    #     nr.attach_url = review_attaches
+                    # else:
+                    #     nr.attach_url = nr(review_attaches=None)
+                      
+                    # print(nr.attach_url)  
+                    # new_entry = nr(review_attaches=None)
+                    
+                    session.add(nr)
+                    session.commit()
+        # print(result_array)
+    else:
+        pass
+    # json_load = json.dumps(response_data)
     
-    for key, value in data_list.items():
-        # print(f"{key}: {value}")
-        if key == 'contents':
-            for item in value:
-                # print(item)
-                # count = 1
-                for k,v in item.items():
+    # return json_load
+    # data_list = json.loads(response_data)
+    
+    # print(data_list)
+    
+    # print(data_list)
+    # for key, value in data_list.items():
+    #     # print(f"{key}: {value}")
+    #     if key == 'contents':
+    #         for item in value:
+    #             print(item)
+    #             # count = 1
+    #             for k,v in item.items():
                     # count += 1
-                    print(f"{k}: {v}")
+                    # print(f"{k}: {v}")
     # data_list = list(data_list)
     # print(data_list)
     # print(response_data)

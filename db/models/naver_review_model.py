@@ -15,7 +15,7 @@ class NaverReview(Base):
     original_create_datetime = Column(DateTime)
     original_product_no = Column(Integer,nullable=False)
     original_product_url = Column(String)
-    attach_url = Column(String)
+    attach_url = Column(String, nullable=True, default=None)
     write_member_id = Column(String)
     insert_datetime = Column(DateTime)
 
