@@ -11,52 +11,42 @@ router = APIRouter(
     prefix='/request'
 )
 
+# naver review parsing
 @router.get("")
-# def read_users(user_id:str):
-def read_users():
+def naver_review_parsing(merchantNo:str, originalProductNo:str, page:int):
     
-    # merchantNo 500070063
-    # originProductNo 4923743074
+    # uri 에 있는 번호는 상품테이블의 index인듯 ex)6076779843
+    # merchantNo 500070063 판매자센터 번호
+    # originProductNo 4923743074 상품번호
     # page 1
     # pageSize 20 (최대 30까지 가능)
     # user
     url = "https://brand.naver.com/n/v1/reviews/paged-reviews"
     data = {
-        "merchantNo":"500070063",
-        "originProductNo":"4923743074",
-        "page":"1",
+        "merchantNo":merchantNo,
+        "originProductNo":originalProductNo,
+        "page":page,
         "pageSize":"20"
     }
     headers = {
         "User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.51"
     }
     
-    response = requests.post(url,json=data,headers=headers)
-    # response = requests.get(url)
+    request = requests.post(url,json=data,headers=headers)
     
     # true 면 진행
-    response_check = response.ok
+    response_check = request.ok
     
-    result_array = []
+    response = {}
     if response_check==True:
-        response_data = response.json()
-        # json_load = json.dumps(response_data, ensure_ascii=False)
-        # data_load = json.loads(response_data)
-        # # print(json_load)
-        
-        # for key, value in data_load.items():
-        #     print(f"{key}: {value}")
-        
+        response_data = request.json()
+
         json_load = json.dumps(response_data)
     
         data_list = json.loads(json_load)
         
-        # print(type(data_list))
         for key, value in data_list.items():
-            # print(f"{key}: {value}")
             if key == 'contents':
-                # result_array = [{i: value[i]} for i in range(len(value))] # ok
-                # i=0
                 for item in value:
                     time_str = item['createDate']
                     datetime_obj = datetime.strptime(time_str, "%Y-%m-%dT%H:%M:%S.%f%z")
@@ -66,6 +56,7 @@ def read_users():
 
                     nr = NaverReview()
 
+                    nr.merchant_no = merchantNo
                     nr.original_review_id = item['id']
                     nr.review_type = item['reviewType']
                     nr.review_content_type = item['reviewContentClassType']
@@ -76,77 +67,32 @@ def read_users():
                     nr.original_product_url = item['productUrl']
                     nr.attach_url = review_attaches
                     nr.write_member_id = item['writerMemberId']
-        
-                    # if(review_attaches != None):
-                    #     nr.attach_url = review_attaches
-                    # else:
-                    #     nr.attach_url = nr(review_attaches=None)
-                      
-                    # print(nr.attach_url)  
-                    # new_entry = nr(review_attaches=None)
-                    
+
                     session.add(nr)
                     session.commit()
-        # print(result_array)
-    else:
-        pass
-    # json_load = json.dumps(response_data)
-    
-    # return json_load
-    # data_list = json.loads(response_data)
-    
-    # print(data_list)
-    
-    # print(data_list)
-    # for key, value in data_list.items():
-    #     # print(f"{key}: {value}")
-    #     if key == 'contents':
-    #         for item in value:
-    #             print(item)
-    #             # count = 1
-    #             for k,v in item.items():
-                    # count += 1
-                    # print(f"{k}: {v}")
-    # data_list = list(data_list)
-    # print(data_list)
-    # print(response_data)
-    
-    # try:
-    #     parsed_data = json.loads(response_data)
-    #     print("Valid JSON")
-    #     for key,value in parsed_data.items():
-    #         print(f"{key}: {value}")
-    # except json.JSONDecodeError:
-    #     print("Invalid JSON")
-    
-    # 리스트 형태로 구하기
-    # data_list = list(response_data)
+                    
+                    response['response_data'] = True
+                    
+    return response
 
-    # 리스트 데이터 확인
-    # print(data_list)
-
-    # soup = BeautifulSoup(response.text, "html.parser")
-    # print(soup)
+@router.get("/oas_login")
+def oa_request(user_id:str, password:str):
+    url = "https://store.oa-world.com/login/login_request"
+    data = {
+        "email":user_id,
+        "password":password
+    }
+    headers = {
+        "X-Requested-With":"XMLHttpRequest",
+        "User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.51"
+    }
     
-    # title = soup.find("h1").text
-    # links = soup.find_all("a")
     
-    # print("Title:",title)
-    # print("Links:")
-    # for link in links:
-    #     print(link["href"])
-        
-    # users = session.query(UserInfo).all()
-    # user = session.query(UserInfo).get(user_id)
-    # print(user_id)
-    # user = UserInfo(user_id=user_id)
-    # UserInfo 클래스에 get_user 메서드 호출
-    # users = UserInfo.get_users(user_id)
-    # users = UserInfo.get_users()
-    # print(users)
+    request = requests.post(url,data=data,headers=headers)
+    
+    print(request.headers)
+    # print(request.text)
+    # print(request.content)
+    # print(request.json())
+    
     pass
-    # return response_data
-
-# @router.get("/join")
-# def user_join():
-#     pass

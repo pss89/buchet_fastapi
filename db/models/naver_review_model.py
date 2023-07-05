@@ -7,6 +7,7 @@ class NaverReview(Base):
     __tablename__ = 'naver_review'
     
     idx = Column(Integer,primary_key=True,nullable=False)
+    merchant_no = Column(String(10),nullable=False)
     original_review_id = Column(Integer,nullable=False)
     review_type = Column(String(20),nullable=False,default='NO_TYPE')
     review_content_type = Column(String(30),nullable=False,default='NO_CONTENT_TYPE')
@@ -27,6 +28,7 @@ class NaverReview(Base):
     
 class NR(BaseModel):
     idx : int
+    merchant_no : str
     original_review_id : int
     review_type : str
     review_content_type : str
