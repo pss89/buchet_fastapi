@@ -89,8 +89,60 @@ def oa_request(user_id:str, password:str):
     
     
     request = requests.post(url,data=data,headers=headers)
+
+    loginCookie = request.cookies
     
-    print(request.headers)
+    # print(loginCookie.get("OSSI"))
+    
+    headers['Cookie'] = "OSSI="+loginCookie.get("OSSI")
+
+    # print(headers)
+    # return False
+    
+    url = "https://store.oa-world.com/mypage/user_info"
+    request = requests.post(url,data=data,headers=headers)
+    # print(request.status_code)
+    # print('------------')
+    
+    # print(request.url)
+    # print('------------')
+    
+    # print(request.headers)
+    # print('------------')
+    
+    # print(request.cookies)
+    # print('------------')
+    
+    print(request.text)
+    print('------------')
+    
+    # response = request.json()
+    
+    # print(response)
+    # print('------------')
+    
+    # print(request.json())
+    # print('------------')
+    
+    # print(request.raise_for_status())
+    # print('------------')
+
+    # print(request.body)
+    # print('------------')
+    
+    # print(request.client)
+    # print('------------')
+    
+    # print(request.is_secure)
+    # print('------------')
+    # print('header')
+    # print(request.headers)
+    # print('cookies')
+    # print(request.cookies)
+    # print('content')
+    # print(request.content)
+    # print('history')
+    # print(request.history)
     # print(request.text)
     # print(request.content)
     # print(request.json())
