@@ -6,6 +6,7 @@ from starlette.middleware.cors import CORSMiddleware
 from routes.test import router as test
 from routes.users import router as user
 from routes.request import router as request
+import fastapi
 
 app = FastAPI() # FastAPI 모듈
 
@@ -20,7 +21,7 @@ app.add_middleware(
 @app.get("/") # Route Path
 def index():
     return {
-        "Python": "Framework-FastAPI",
+        "Python": "Framework-FastAPI "+fastapi.__version__
     }
     
 # routes 폴더에 추가 된 route 파일들 호출
