@@ -6,6 +6,7 @@ from starlette.middleware.cors import CORSMiddleware
 from routes.test import router as test
 from routes.users import router as user
 from routes.request import router as request
+from routes.jwt import router as jwt
 import fastapi
 
 app = FastAPI() # FastAPI 모듈
@@ -28,3 +29,4 @@ def index():
 app.include_router(test)
 app.include_router(user)
 app.include_router(request)
+app.include_router(jwt)

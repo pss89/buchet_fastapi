@@ -2,6 +2,7 @@ from sqlalchemy import Column,Integer,String,DateTime,select,ForeignKey
 from sqlalchemy.orm import relationship,selectinload,joinedload
 from pydantic import BaseModel
 from db.session import Base,session
+from typing import List,Optional
 
 class UserInfo(Base):
     __tablename__ = 'user_info'
@@ -18,22 +19,28 @@ class UserInfo(Base):
     
     # user_info_detail에 foreignkey 가 있는것을 확인한다
     details = relationship("UserInfoDetail")
-
+        
     # user_info, user_info_detail 테이블 join 한 쿼리 호출하기 위한 함수
-    def get_users():
+    def get_users(userId: Optional[str] = None):
         # users = session.query(UserInfo).join(UserInfo.details).all()
-        users = (
-            session.query(UserInfo)
-            .join(UserInfo.details)
-            .options(selectinload(UserInfo.details))
-            # .filter(UserInfo.user_id == 'sosn3')
-            # .filter(UserInfo.user_id == user_id)
-            .all()
-        )
+        # users = (
+        #     session.query(UserInfo)
+        #     .join(UserInfo.details)
+        #     .options(selectinload(UserInfo.details))
+        #     .filter(UserInfo.user_id == userId)
+        #     # .filter(UserInfo.user_id == user_id)
+        #     .all()
+        # )
 
+        query = session.query(UserInfo).join(UserInfo.details).options(selectinload(UserInfo.details))
+
+        if userId is not None:
+            query = query.filter(UserInfo.user_id == userId)
+
+        users = query.all()
+        # return users
         
         return users
-    
 class UserInfoDetail(Base):
     __tablename__ = 'user_info_detail'
     # foreignkey 를 정의해줘야 join 가능
