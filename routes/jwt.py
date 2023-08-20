@@ -75,9 +75,11 @@ def request_test(token: str):
     decoded_data = jwt.decode(token, SECRET_KEY, algorithms=ALGORITHM)
     json_data = json.dumps(decoded_data, indent=2)
     
-    print(json_data)
+    response_data = json.loads(json_data)
+    # print(json_data)
     
-    pass
+    # pass
+    return response_data
 
 # 토큰을 사용하여 보호된 엔드포인트
 # @app.get("/protected")

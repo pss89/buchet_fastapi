@@ -30,3 +30,11 @@ app.include_router(test)
 app.include_router(user)
 app.include_router(request)
 app.include_router(jwt)
+
+# 앞으로 할 것
+# fastapi 로 아래 항목들 설치 및 사용하는 방법 알려줘
+
+# - 이메일 전송
+# - 슬랙 전송
+# - 카카오 & 네이버 소셜 로그인
+# - 레디스 사용
