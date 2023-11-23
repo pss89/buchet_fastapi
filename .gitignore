@@ -2,3 +2,4 @@ backend/.env
 backend/alembic.ini
 frontend/.env
 venv3_10/
+__pycache__

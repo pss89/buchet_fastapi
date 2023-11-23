@@ -8,8 +8,8 @@ from starlette.middleware.cors import CORSMiddleware
 # from backend.routes.request import router as request
 # from backend.routes.jwt import router as jwt
 
-from backend.domain.question import question_router
 from backend.domain.answer import answer_router
+from backend.domain.question import question_router
 
 import fastapi
 
@@ -37,8 +37,8 @@ def index():
 def hello():
     return {"message": "Hello, Python & Svelte"}
 
-app.include_router(question_router.router)
 app.include_router(answer_router.router)
+app.include_router(question_router.router)
     
 # routes 폴더에 추가 된 route 파일들 호출
 # app.include_router(test)
