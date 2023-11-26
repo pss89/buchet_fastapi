@@ -11,7 +11,8 @@
         //     })
         // })
         fastapi('get', '/api/question/list', {}, (json) => {
-            question_list = json
+            // question_list = json
+            question_list = json.question_list
         })
     }
 

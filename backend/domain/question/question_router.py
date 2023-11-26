@@ -11,17 +11,24 @@ router = APIRouter(
     prefix="/api/question",
 )
 
-@router.get("/list", response_model=list[question_schema.Question])
-def question_list(db: Session = Depends(get_db)):
+# @router.get("/list", response_model=list[question_schema.Question])
+@router.get("/list", response_model=question_schema.QuestionList)
+def question_list(db: Session = Depends(get_db), page: int = 0, size: int = 10):
     # db = SessionLocal()
     # _question_list = db.query(Question).order_by(Question.create_date.desc()).all()
     # db.close()
     # with get_db() as db:
     #     _question_list = db.query(Question).order_by(Question.create_date.desc()).all()
         
-    _question_list = question_crud.get_question_list(db)
+    # _question_list = question_crud.get_question_list(db)
     
-    return _question_list
+    # return _question_list
+    total, _question_list = question_crud.get_question_list(db, skip=page*size, limit=size)
+    
+    return { 
+        'total': total,
+        'question_list': _question_list
+    }
 
 @router.get("/detail/{question_id}", response_model=question_schema.Question)
 def question_detail(question_id: int, db: Session = Depends(get_db)):
@@ -32,3 +39,7 @@ def question_detail(question_id: int, db: Session = Depends(get_db)):
 def question_create(_question_create: question_schema.QuestionCreate, 
     db: Session = Depends(get_db)):
     question_crud.create_question(db=db, question_create=_question_create)
+    
+@router.post("/create_quick", status_code=status.HTTP_204_NO_CONTENT)
+def question_create_quick(db: Session = Depends(get_db)):
+    question_crud.create_quick_question(db=db)
