@@ -2,4 +2,8 @@ backend/.env
 backend/alembic.ini
 frontend/.env
 venv3_10/
-__pycache__
+venv310/
+__pycache__/*
+backend/__pycache__/*
+backend/domain/answer/__pycache__/*
+backend/domain/question/__pycache__/*
