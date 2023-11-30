@@ -15,6 +15,7 @@ class Question(Base):
 
 class Answer(Base):
     __tablename__ = "answer"
+    __table_args__ = {'comment': ''}
 
     id = Column(Integer, primary_key=True)
     content = Column(Text, nullable=False)
