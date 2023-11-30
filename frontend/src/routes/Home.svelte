@@ -1,11 +1,13 @@
 <script>
     import fastapi from "../lib/api"
-    import { link } from 'svelte-spa-router'
+    import { link } from "svelte-spa-router"
+    import { page } from "../lib/store"
 
     let question_list = []
 
     let size = 10
-    let page = 0
+    // let page = 0
+
     // 게시물의 총건수
     let total = 0
     // 리엑티브 선언 (svelte 에서 상태가 변경될 때 자동으로 업데이트)
@@ -25,7 +27,8 @@
 
         fastapi('get', '/api/question/list', params, (json) => {
             question_list = json.question_list
-            page = _page
+            // page = _page
+            $page = _page
             total = json.total
         });
         // fastapi('get', '/api/question/list', {}, (json) => {
@@ -35,7 +38,8 @@
     }
 
     // get_question_list()
-    get_question_list(0)
+    // get_question_list(0)
+    $: get_question_list($page)
 </script>
 
 <div class="container my-3">
@@ -63,15 +67,15 @@
     <ul class="pagination justify-content-center">
         <!-- 이전페이지 -->
         <!-- 이전 페이지값 없으면 비활성화 -->
-        <li class="page-item {page <= 0 && 'disabled'}">
+        <li class="page-item {$page <= 0 && 'disabled'}">
             <button class="page-link" on:click="{() => get_question_list(page-1)}">이전</button>
         </li>
         <!-- 페이지번호-->
         {#each Array(total_page) as _, loop_page}
         <!-- 페이지 제한 -->
-        {#if loop_page >= page-5 && loop_page <= page+5}
+        {#if loop_page >= $page-5 && loop_page <= $page+5}
         <!-- 현재 페이지와 가틍면 활성화 -->
-        <li class="page-item {loop_page === page && 'active'}">
+        <li class="page-item {loop_page === $page && 'active'}">
             <button on:click="{() => get_question_list(loop_page)}" class="page-link">{loop_page + 1}</button>
         </li>
         {/if}
@@ -79,7 +83,7 @@
         <!-- 다음 페이지 -->
         <!-- 다음페이지값 없으면 비활성화 -->
         <li class="page-item {page >= total_page-1 && 'disabled'}">
-            <button class="page-link" on:click="{() => get_question_list(page+1)}">다음</button>
+            <button class="page-link" on:click="{() => get_question_list($page+1)}">다음</button>
         </li>
     </ul>
     <!-- 페이징 끝 -->
