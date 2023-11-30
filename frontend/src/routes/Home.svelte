@@ -2,6 +2,8 @@
     import fastapi from "../lib/api"
     import { link } from "svelte-spa-router"
     import { page } from "../lib/store"
+    import moment from 'moment/min/moment-with-locales'
+    moment.locale('ko')
 
     let question_list = []
 
@@ -58,7 +60,10 @@
             <td>
                 <a use:link href="/detail/{question.id}">{question.subject}</a>
             </td>
-            <td>{question.create_date}</td>
+            <!-- <td>{question.create_date}</td> -->
+            <td>
+                {moment(question.create_date).format("YYYY년 MM월 DD일 hh:mm a")}
+            </td>
         </tr>
         {/each}
         </tbody>
@@ -68,8 +73,9 @@
         <!-- 이전페이지 -->
         <!-- 이전 페이지값 없으면 비활성화 -->
         <li class="page-item {$page <= 0 && 'disabled'}">
-            <button class="page-link" on:click="{() => get_question_list(page-1)}">이전</button>
+            <button class="page-link" on:click="{() => get_question_list($page-1)}">이전</button>
         </li>
+
         <!-- 페이지번호-->
         {#each Array(total_page) as _, loop_page}
         <!-- 페이지 제한 -->
@@ -80,6 +86,7 @@
         </li>
         {/if}
         {/each}
+
         <!-- 다음 페이지 -->
         <!-- 다음페이지값 없으면 비활성화 -->
         <li class="page-item {page >= total_page-1 && 'disabled'}">
