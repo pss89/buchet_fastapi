@@ -60,6 +60,9 @@
             <td>{ total - ($page * size) - i}</td>
             <td>
                 <a use:link href="/detail/{question.id}">{question.subject}</a>
+                {#if question.answers.length > 0}
+                <span class="text-danger small mx-2">{question.answers.length}</span>
+                {/if}
             </td>
             <!-- <td>{question.create_date}</td> -->
             <td>
