@@ -3,7 +3,6 @@ from sqlalchemy.orm import relationship
 
 from backend.database import Base
 
-
 class Question(Base):
     __tablename__ = "question"
 

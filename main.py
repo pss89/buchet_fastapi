@@ -10,6 +10,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from backend.domain.answer import answer_router
 from backend.domain.question import question_router
+from backend.domain.user import user_router
 
 import fastapi
 
@@ -39,7 +40,8 @@ def hello():
 
 app.include_router(answer_router.router)
 app.include_router(question_router.router)
-    
+app.include_router(user_router.router)
+
 # routes 폴더에 추가 된 route 파일들 호출
 # app.include_router(test)
 # app.include_router(request)
