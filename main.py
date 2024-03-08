@@ -17,7 +17,7 @@ import fastapi
 app = FastAPI() # FastAPI 모듈
 
 origins = [
-    "http://localhost:8080"
+    "http://localhost:5173" # frontend svelte에서 호출하는 origin 주소
 ]
 
 app.add_middleware(
