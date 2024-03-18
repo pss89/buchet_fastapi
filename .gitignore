@@ -9,3 +9,4 @@ backend/domain/*/__pycache__/*
 backend/domain/answer/__pycache__/*
 backend/domain/question/__pycache__/*
 backend/migrations/*
+*/__pycache__/*
