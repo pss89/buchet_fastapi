@@ -16,10 +16,12 @@ import fastapi
 
 app = FastAPI() # FastAPI 모듈
 
+# svelte frontend에서 호출하는 origin 주소
 origins = [
     "http://localhost:5173" # frontend svelte에서 호출하는 origin 주소
 ]
 
+# 미들웨어 체크
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -28,7 +30,8 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-@app.get("/") # Route Path
+# Route Path
+@app.get("/")
 def index():
     return {
         "Python": "Framework-FastAPI "+fastapi.__version__
@@ -38,6 +41,7 @@ def index():
 def hello():
     return {"message": "Hello, Python & Svelte"}
 
+# app에 include 할 router 정보
 app.include_router(answer_router.router)
 app.include_router(question_router.router)
 app.include_router(user_router.router)
