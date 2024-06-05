@@ -43,7 +43,21 @@ const fastapi = (operation, url, params, success_callback, failure_callback) => 
                             success_callback(json)
                         }
                     }else {
+                        // if (json.hasOwnProperty('detail')) {
+                        //     if (json.detail) {
+                        //         alert(json.detail)
+                        //     } else {
+                        //         alert(json)
+                        //     }
+                        // }
                         if (failure_callback) {
+                            if (json.hasOwnProperty('detail')) {
+                                if (json.detail) {
+                                    alert(json.detail)
+                                } else {
+                                    alert(json)
+                                }
+                            }
                             failure_callback(json)
                         }else {
                             alert(JSON.stringify(json))
