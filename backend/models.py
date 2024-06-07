@@ -14,7 +14,8 @@ class Question(Base):
     subject = Column(String(255), nullable=False)
     content = Column(Text, nullable=False)
     create_date = Column(DateTime, nullable=False)
-
+    user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
+    user = relationship("User", backref="question_users")
 
 class Answer(Base):
     __tablename__ = "answer"
@@ -24,6 +25,8 @@ class Answer(Base):
     create_date = Column(DateTime, nullable=False)
     question_id = Column(Integer, ForeignKey("question.id"))
     question = relationship("Question", backref="answers")
+    user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
+    user = relationship("User", backref="answer_users")
 
 class User(Base):
     __tablename__ = "user"
