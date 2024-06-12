@@ -1,3 +1,5 @@
+# php로 따지면 헬퍼 혹은 controller 역활
+
 from pydantic import BaseModel, field_validator, EmailStr
 from pydantic_core.core_schema import FieldValidationInfo
 
@@ -23,3 +25,8 @@ class Token(BaseModel):
     access_token: str
     token_type: str
     username: str
+    
+class User(BaseModel):
+    id: int
+    username: str
+    email: str

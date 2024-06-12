@@ -7,7 +7,7 @@ export default defineConfig({
     host: '0.0.0.0',
     // port: 8080, // 주석제거 (기존 port인 5173으로 사용하기)
     watch: {
-      usePolling: true,
+      // usePolling: true,
       // interval: 1000,
     },
   },
