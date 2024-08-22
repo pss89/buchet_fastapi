@@ -12,6 +12,8 @@ from backend.domain.answer import answer_router
 from backend.domain.question import question_router
 from backend.domain.user import user_router
 
+import logging
+
 import fastapi
 
 app = FastAPI() # FastAPI 모듈
