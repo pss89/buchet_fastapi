@@ -1,8 +1,8 @@
 <script>
     import fastapi from "../lib/api"
     import Error from "../components/Error.svelte"
-    import { push } from "svelte-spa-router"
-    import { is_login } from "../lib/store"
+    import { link, push } from "svelte-spa-router"
+    import { is_login, username } from "../lib/store"
     import moment from 'moment/min/moment-with-locales'
     moment.locale('ko')
 
@@ -39,6 +39,24 @@
             }
         )
     }
+
+    function delete_question(_question_id) {
+        if(window.confirm('정말로 삭제하시겠습니까?')) {
+            let url = "/api/question/delete"
+            let params = {
+                question_id: _question_id
+            }
+
+            fastapi('delete', url, params,
+                (json) => {
+                    push('/')
+                },
+                (err_json) => {
+                    error = err_json
+                }
+            )
+        }
+    }
 </script>
 
 <div class="container my-3">
@@ -49,15 +67,22 @@
             <div class="card-text" style="white-space: pre-line;">{question.content}</div>
             <div class="d-flex justify-content-end">
                 <div class="badge bg-light text-dark p-2 text-start">
-                    <!-- {question.create_date} -->
                     <div class="mb-2">{ question.user ? question.user.username : "" }</div>
                     <div>{moment(question.create_date).format("YYYY년 MM월 DD일 hh:mm a")}</div>
                 </div>
             </div>
+            <div class="my-3">
+                {#if question.user && $username === question.user.username }
+                <a use:link href="/question-modify/{question.id}"
+                    class="btn btn-sm btn-outline-secondary">수정</a>
+                <button type="button" class="btn btn-sm btn-outline-danger" 
+                    on:click="{() => { delete_question(question.id) }}">삭제</button>
+                {/if}
+            </div>
         </div>
     </div>
 
-    <button class="btn btn-secondary" on:click="{() => { push('/') }}">목록으로</button>
+    <button type="button" class="btn btn-secondary" on:click="{() => { push('/') }}">목록으로</button>
 
     <!-- 답변 목록 -->
     <h5 class="border-bottom my-3 py-2">{question.answers.length}개의 답변이 있습니다.</h5>

@@ -7,8 +7,8 @@ export default defineConfig({
     // host: '0.0.0.0', // docker 환경에서만
     // port: 8080, // 주석제거 (기존 port인 5173으로 사용하기)
     watch: {
-      // usePolling: true,
-      // interval: 1000,
+      usePolling: true,
+      interval: 1000,
     },
   },
   plugins: [svelte()],
