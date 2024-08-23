@@ -20,7 +20,7 @@ app = FastAPI() # FastAPI 모듈
 
 # svelte frontend에서 호출하는 origin 주소
 origins = [
-    "http://localhost:5173" # frontend svelte에서 호출하는 origin 주소
+    "http://localhost:3000" # frontend svelte에서 호출하는 origin 주소
 ]
 
 # 미들웨어 체크
