@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Table
 from sqlalchemy.orm import relationship
 
 from backend.database import Base
@@ -6,6 +6,20 @@ from backend.database import Base
 # alembic init migrations (처음에만 실행)
 # alembic revision --autogenerate
 # alembic upgrade head
+
+question_voter = Table(
+    'question_voter',
+    Base.metadata,
+    Column('user_id', Integer, ForeignKey('user.id'), primary_key=True),
+    Column('question_id', Integer, ForeignKey('question.id'), primary_key=True)
+)
+
+answer_voter = Table(
+    'answer_voter',
+    Base.metadata,
+    Column('user_id', Integer, ForeignKey('user.id'), primary_key=True),
+    Column('answer_id', Integer, ForeignKey('answer.id'), primary_key=True)
+)
 
 class Question(Base):
     __tablename__ = "question"
@@ -17,6 +31,7 @@ class Question(Base):
     user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
     user = relationship("User", backref="question_users")
     modify_date = Column(DateTime, nullable=True)
+    voter = relationship('User', secondary=question_voter, backref='question_voters')
 
 class Answer(Base):
     __tablename__ = "answer"
@@ -29,6 +44,7 @@ class Answer(Base):
     user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
     user = relationship("User", backref="answer_users")
     modify_date = Column(DateTime, nullable=True)
+    voter = relationship('User', secondary=answer_voter, backref='answer_voters')
 
 class User(Base):
     __tablename__ = "user"

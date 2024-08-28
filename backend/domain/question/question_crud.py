@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from backend.domain.question.question_schema import QuestionCreate, QuestionUpdate
-from backend.models import Question
+from backend.models import Question, User
 from sqlalchemy.orm import Session
 
 
@@ -49,3 +49,7 @@ def update_question(db: Session, db_question: Question,
 def delete_question(db: Session, db_question: Question):
     db.delete(db_question)
     db.commit()
+    
+def vote_question(db: Session, db_question: Question, db_user: User):
+    db_question.voter.append(db_user)
+    db.commit();
