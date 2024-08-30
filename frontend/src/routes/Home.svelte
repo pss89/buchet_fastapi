@@ -1,7 +1,7 @@
 <script>
     import fastapi from "../lib/api"
     import { link } from "svelte-spa-router"
-    import { page, is_login } from "../lib/store"
+    import { page, keyword, is_login } from "../lib/store"
     import moment from 'moment/min/moment-with-locales'
     moment.locale('ko')
 
@@ -12,32 +12,50 @@
 
     // 게시물의 총건수
     let total = 0
+    let kw = "";
+
     // 리엑티브 선언 (svelte 에서 상태가 변경될 때 자동으로 업데이트)
     // 전체 페이지 갯수
     $: total_page = Math.ceil(total/size)
 
-    function get_question_list(_page) {
-        // fetch("http://127.0.0.1:8000/api/question/list").then((response) => {
-        //     response.json().then((json) => {
-        //         question_list = json
-        //     })
-        // })
-        let params = {
-            page: _page,
-            size: size,
-        }
+    // function get_question_list(_page) {
+    //     // fetch("http://127.0.0.1:8000/api/question/list").then((response) => {
+    //     //     response.json().then((json) => {
+    //     //         question_list = json
+    //     //     })
+    //     // })
+    //     let params = {
+    //         page: _page,
+    //         size: size,
+    //         keword: kw
+    //     }
 
+    //     fastapi('get', '/api/question/list', params, (json) => {
+    //         question_list = json.question_list
+    //         // page = _page
+    //         $page = _page
+    //         total = json.total
+    //     });
+    //     // fastapi('get', '/api/question/list', {}, (json) => {
+    //     //     // question_list = json
+    //     //     question_list = json.question_list
+    //     // })
+    // }
+
+    function get_question_list() {
+        let params = {
+            page: $page,
+            size: size,
+            keyword: $keyword,
+        }
         fastapi('get', '/api/question/list', params, (json) => {
             question_list = json.question_list
-            // page = _page
-            $page = _page
             total = json.total
-        });
-        // fastapi('get', '/api/question/list', {}, (json) => {
-        //     // question_list = json
-        //     question_list = json.question_list
-        // })
+            kw = $keyword
+        })
     }
+
+    $:$page, $keyword, get_question_list()
 
     // get_question_list()
     // get_question_list(0)
@@ -45,6 +63,20 @@
 </script>
 
 <div class="container my-3">
+    <div class="row my-3">
+        <div class="col-6">
+            <a use:link href="/question-create" 
+                class="btn btn-primary {$is_login ? '' : 'disabled'}">질문 등록하기</a>
+        </div>
+        <div class="col-6">
+            <div class="input-group">
+                <input type="text" class="form-control" bind:value="{kw}">
+                <button class="btn btn-outline-secondary" on:click={() => {$keyword = kw, $page = 0}}>
+                    찾기
+                </button>
+            </div>
+        </div>
+    </div>
     <table class="table">
         <thead>
         <tr class="text-center table-dark">
@@ -82,7 +114,8 @@
         <!-- 이전페이지 -->
         <!-- 이전 페이지값 없으면 비활성화 -->
         <li class="page-item {$page <= 0 && 'disabled'}">
-            <button class="page-link" on:click="{() => get_question_list($page-1)}">이전</button>
+            <!-- <button class="page-link" on:click="{() => get_question_list($page-1)}">이전</button> -->
+            <button class="page-link" on:click="{() => get_question_list($page--)}">이전</button>
         </li>
 
         <!-- 페이지번호-->
@@ -91,7 +124,8 @@
         {#if loop_page >= $page-5 && loop_page <= $page+5}
         <!-- 현재 페이지와 가틍면 활성화 -->
         <li class="page-item {loop_page === $page && 'active'}">
-            <button on:click="{() => get_question_list(loop_page)}" class="page-link">{loop_page + 1}</button>
+            <!-- <button on:click="{() => get_question_list(loop_page)}" class="page-link">{loop_page + 1}</button> -->
+            <button on:click="{() => $page = loop_page}" class="page-link">{loop_page+1}</button>
         </li>
         {/if}
         {/each}
@@ -99,9 +133,10 @@
         <!-- 다음 페이지 -->
         <!-- 다음페이지값 없으면 비활성화 -->
         <li class="page-item {page >= total_page-1 && 'disabled'}">
-            <button class="page-link" on:click="{() => get_question_list($page+1)}">다음</button>
+            <!-- <button class="page-link" on:click="{() => get_question_list($page+1)}">다음</button> -->
+            <button class="page-link" on:click="{() => get_question_list($page++)}">다음</button>
         </li>
     </ul>
     <!-- 페이징 끝 -->
-    <a use:link href="/question-create" class="btn btn-primary {$is_login ? '' : 'disabled'}">질문 등록하기</a>
+    <!-- <a use:link href="/question-create" class="btn btn-primary {$is_login ? '' : 'disabled'}">질문 등록하기</a> -->
 </div>

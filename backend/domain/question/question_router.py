@@ -15,7 +15,8 @@ router = APIRouter(
 
 # @router.get("/list", response_model=list[question_schema.Question])
 @router.get("/list", response_model=question_schema.QuestionList)
-def question_list(db: Session = Depends(get_db), page: int = 0, size: int = 10):
+def question_list(db: Session = Depends(get_db), 
+                    page: int = 0, size: int = 10, keyword: str = ''):
     # db = SessionLocal()
     # _question_list = db.query(Question).order_by(Question.create_date.desc()).all()
     # db.close()
@@ -25,7 +26,8 @@ def question_list(db: Session = Depends(get_db), page: int = 0, size: int = 10):
     # _question_list = question_crud.get_question_list(db)
     
     # return _question_list
-    total, _question_list = question_crud.get_question_list(db, skip=page*size, limit=size)
+    total, _question_list = question_crud.get_question_list(
+        db, skip=page*size, limit=size, keyword=keyword)
     
     return { 
         'total': total,
