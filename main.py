@@ -1,6 +1,6 @@
 # main.py
 
-from fastapi import FastAPI
+from fastapi import FastAPI, __version__
 from typing import List,Optional
 from starlette.middleware.cors import CORSMiddleware
 # from backend.routes.test import router as test
@@ -13,8 +13,6 @@ from backend.domain.question import question_router
 from backend.domain.user import user_router
 
 import logging
-
-import fastapi
 
 app = FastAPI() # FastAPI 모듈
 
@@ -36,7 +34,7 @@ app.add_middleware(
 @app.get("/")
 def index():
     return {
-        "Python": "Framework-FastAPI "+fastapi.__version__
+        "Python": "Framework-FastAPI "+__version__
     }
     
 @app.get("/hello")
