@@ -19,6 +19,7 @@ from backend.domain.question import question_router
 from backend.domain.user import user_router
 
 import logging
+import subprocess
 
 app = FastAPI() # FastAPI 모듈
 
@@ -49,9 +50,28 @@ def index():
 
 @app.get("/hello")
 def hello():
+    front_foler = "frontend"
+    
+    # npm list svelte 명령을 실행하고 결과를 캡처합니다.
+    result = subprocess.run(
+        ["npm", "list", "svelte"], 
+        capture_output=True, 
+        text=True, 
+        check=False,
+        cwd=front_foler
+    )
+    
+    # 결과에서 svelte 버전을 추출합니다.
+    output = result.stdout
+
+    # 'svelte@version' 형태의 문자열에서 버전만 추출
+    version_lines = [line for line in output.splitlines() if "svelte@" in line and not "deduped" in line]
+    svelte_version = version_lines[-1].split('@')[1].strip()
+    
     return {
         "message": "Hello, Python & Svelte",
-        "Python-Framework": "FastAPI "+__version__
+        "Python-Framework": "FastAPI "+__version__,
+        "Svelte-Framework": "Svelte "+svelte_version
     }
 
 # routes 폴더에 추가 된 route 파일들 호출
