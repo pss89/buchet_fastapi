@@ -1,8 +1,14 @@
 # main.py
 
+# import : 모듈 전체 호출
+# from : 모듈 내에서 특정 함수, 클래스 호출
+
 from fastapi import FastAPI, __version__
 from typing import List,Optional
 from starlette.middleware.cors import CORSMiddleware
+from starlette.responses import FileResponse
+from starlette.staticfiles import StaticFiles
+
 # from backend.routes.test import router as test
 # from backend.routes.users import router as user
 # from backend.routes.request import router as request
@@ -30,21 +36,23 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-# Route Path
-@app.get("/")
-def index():
-    return {
-        "Python": "Framework-FastAPI "+__version__
-    }
-    
-@app.get("/hello")
-def hello():
-    return {"message": "Hello, Python & Svelte"}
-
 # app에 include 할 router 정보
 app.include_router(answer_router.router)
 app.include_router(question_router.router)
 app.include_router(user_router.router)
+app.mount("/assets", StaticFiles(directory="frontend/dist/assets"))
+
+# Route Path
+@app.get("/")
+def index():
+    return FileResponse("frontend/dist/index.html")
+
+@app.get("/hello")
+def hello():
+    return {
+        "message": "Hello, Python & Svelte",
+        "Python-Framework": "FastAPI "+__version__
+    }
 
 # routes 폴더에 추가 된 route 파일들 호출
 # app.include_router(test)
