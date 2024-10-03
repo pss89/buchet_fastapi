@@ -31,3 +31,12 @@ def delete_answer(db: Session, db_answer: Answer):
 def vote_answer(db: Session, db_answer: Answer, db_user: User):
     db_answer.voter.append(db_user)
     db.commit()
+    
+def create_quick_answer(db: Session, question: Question):
+    for i in range(300):
+        a = Answer(question=question,
+                    content='테스트 데이터입니다:[%03d]' % i,
+                    create_date=datetime.now(),
+                    user_id=1)
+        db.add(a)
+        db.commit()

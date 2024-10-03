@@ -30,6 +30,7 @@ class Question(Base):
     create_date = Column(DateTime, nullable=False)
     user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
     user = relationship("User", backref="question_users")
+    views = Column(Integer, default=0)
     modify_date = Column(DateTime, nullable=True)
     voter = relationship('User', secondary=question_voter, backref='question_voters')
 

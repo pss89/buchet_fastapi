@@ -16,7 +16,7 @@
     let error = {detail:[]}
 
     function get_question() {
-        fastapi("get", "/api/question/detail/" + question_id, {}, (json) => {
+        fastapi("get", "/api/question/detail/" + question_id, {views : 1}, (json) => {
             question = json
         })
     }
@@ -129,7 +129,8 @@
                 {/if}
                 <div class="badge bg-light text-dark p-2 text-start">
                     <div class="mb-2">{ question.user ? question.user.username : "" }</div>
-                    <div>{moment(question.create_date).format("YYYY년 MM월 DD일 hh:mm a")}</div>
+                    <div class="mb-2">{moment(question.create_date).format("YYYY년 MM월 DD일 hh:mm a")}</div>
+                    <div>조회수 : {question.views}</div>
                 </div>
             </div>
             <div class="my-3">

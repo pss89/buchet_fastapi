@@ -39,8 +39,19 @@ def get_question_list(db: Session, skip: int = 0, limit: int = 10, keyword: str 
 """
 질문자에 대한 정보를 가져온다.
 """
-def get_question(db: Session, question_id: int):
+def get_question(db: Session, question_id: int, page: int = 0, size: int = 10):
     question = db.query(Question).get(question_id)
+    
+    # 페이징을 적용하여 answers를 가져옵니다.
+    # total_answers = len(question.answers)
+    # start = page * size
+    #end = start + size
+    #paginated_answers = question.answers[start:end]
+
+    # Question 객체에 페이징된 answers를 설정합니다.
+    #question.answers = paginated_answers
+    #question.total_answers = total_answers  # 총 답변 수를 추가로 반환할 수 있습니다.
+    
     return question
 
 def create_question(db: Session, question_create: QuestionCreate, user: User):
@@ -73,3 +84,11 @@ def delete_question(db: Session, db_question: Question):
 def vote_question(db: Session, db_question: Question, db_user: User):
     db_question.voter.append(db_user)
     db.commit();
+    
+def update_views(db: Session, question_id: int):
+    question = db.query(Question).filter(Question.id == question_id).first()
+    if question:
+        if question.views is None:
+            question.views = 0
+        question.views += 1
+        db.commit()

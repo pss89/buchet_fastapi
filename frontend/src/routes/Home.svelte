@@ -99,6 +99,9 @@
                 {#if question.voter.length > 0}
                 <span class="text-success small mx-2">{question.voter.length}</span>
                 {/if}
+                {#if question.views}
+                <span class="text-primary small mx-2">{question.views}</span>
+                {/if}
             </td>
             <!-- <td>{question.create_date}</td> -->
             <td>{ question.user ? question.user.username : "" }</td>

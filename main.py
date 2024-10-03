@@ -73,6 +73,22 @@ def hello():
         "Python-Framework": "FastAPI "+__version__,
         "Svelte-Framework": "Svelte "+svelte_version
     }
+    
+@app.get("/todoList")
+def todoList():
+    return {
+        "todoList": [
+            {"id": 1, "title": "답변 페이징과 정렬"},
+            {"id": 2, "title": "댓글"},
+            {"id": 3, "title": "카테고리"},
+            {"id": 4, "title": "비밀번호 찾기와 변경"},
+            {"id": 5, "title": "프로필"},
+            {"id": 6, "title": "최근 답변과 최근 댓글"},
+            {"id": 7, "title": "조회 수(완료)"},
+            {"id": 8, "title": "소셜 로그인"},
+            {"id": 9, "title": "마크다운 에디터"},
+        ]
+    }
 
 # routes 폴더에 추가 된 route 파일들 호출
 # app.include_router(test)

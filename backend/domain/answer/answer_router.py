@@ -69,3 +69,8 @@ def answer_vote(_answer_vote: answer_schema.AnswerVote,
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail="데이터를 찾을수 없습니다.")
     answer_crud.vote_answer(db, db_answer=db_answer, db_user=current_user)
+    
+@router.post("/create_quick", status_code=status.HTTP_204_NO_CONTENT)
+def answer_create_quick(db: Session = Depends(get_db)):
+    question = question_crud.get_question(db, question_id=229)
+    answer_crud.create_quick_answer(db=db, question=question)
